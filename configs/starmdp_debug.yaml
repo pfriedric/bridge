@@ -1,0 +1,51 @@
+# Default StarMDP configuration
+# This is loaded when no CLI arguments are provided
+
+# environment and broad experiment params
+env: StarMDP_with_random_flinging
+N_experiments: 2  # seeds. 3-30
+N_iterations: 2  # online iterations per seed. 2-15
+episode_length: 8  # 8 for StarMDP, 10 for Gridworld
+env_move_prob: 0.7  # 0.7 for StarMDP, 0.8 for Gridworld
+phi_name: id_short  # options: state_counts, id_short, id_long, final_state
+do_offline_BC: true
+N_offline_trajs: 2  # starmdp: 2, gridworld: 10 (more and BC solves it)
+
+# offline learning
+delta_offline: 0.05
+N_confset_size: 200  # for offline confset construction: (random generation in online_learning if no BC, or size of initial sample for rejection-sampling-from-sample)
+which_confset_construction_method: rejection-sampling-from-all  # rejection-sampling-from-all (rej-sample from ALL possible policies (only feasible in tiny MDPs)), rejection-sampling-from-sample (rej-sample from N_confset_size many random policies)
+n_transition_model_epochs_offline: 5
+offlineradius_formula: hardcode_radius  # options: full, ignore_bracket, only_alpha, hardcode_radius_scaled, hardcode_radius
+offlineradius_override_value: 0.9
+
+# online learning
+n_embedding_samples: 10
+N_rollouts: 10
+delta_online: 0.05
+W: 1
+w_MLE_epochs: 10
+w_initialization: uniform
+w_sigmoid_slope: 10
+xi_formula: smaller_start  # full, smaller_start
+n_transition_model_epochs_online: 5
+online_confset_bonus_multiplier: 0.01  # 0.01 for starMDP, 0.008 for gridworld. leave "1" for 'no multiplier'.
+gamma_t_hardcoded_value: 0.2  # 0.2 for starMDP, 0.15 for gridworld.
+baseline_search_space: all_policies  # "random_sample" (of size N_confset_size), "all_policies", "augmented_ball" (augmenting BRIDGE's ball to N_confset_size's size with random policies)
+
+# verbosity
+verbose: ["loop-summary", "warnings"]  # list, either [] or any combination of 'full', 'loop-summary', 'radius-calc', 'offline-confset', 'online-confset', 'warnings', 'losses'
+
+# which experiments to run
+run_bridge: true
+run_baseline: true
+
+# saving
+save_results: true
+run_ID: debug  # options: None (creates unique 3-digit ID), or string. If string, checks if dir exists -- if yes, loads & does what's specified in 'loaded_run_purpose', if no, runs new experiment.
+loaded_run_behaviour: overwrite  # options: "continue" (load metrics, sim what's missing, re-plot), "redo" (load params, re-sim, re-plot), "overwrite" (don't load anything, write to dir with current params)
+
+# plotting
+which_plot_subopt: cumulative_regret  # "suboptimality_percent" or "regret" or "cumulative_regret"
+plot_logy: true
+plot_slim: true

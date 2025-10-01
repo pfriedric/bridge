@@ -1,0 +1,16 @@
+# gym
+joblib
+tqdm
+numpy
+matplotlib
+seaborn
+scipy
+networkx
+torch
+cvxopt
+gymnasium
+gymnasium[mujoco]
+gymnasium_robotics[mujoco-py]
+PyYAML
+wandb
+stable-baselines3

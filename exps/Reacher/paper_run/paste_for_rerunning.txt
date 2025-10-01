@@ -1,0 +1,1 @@
+python -m main_mujoco -cn reacher_paper

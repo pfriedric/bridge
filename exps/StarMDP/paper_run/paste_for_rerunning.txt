@@ -1,0 +1,1 @@
+python -m main_tabular -cn starmdp_paper

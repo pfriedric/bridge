@@ -1,0 +1,35 @@
+# environment and broad experiment params
+env_id: "Reacher-v5"  # "HalfCheetah-v5", "Reacher-v5"
+seed: 42  # initial seed
+N_experiments: 30  # seeds. 3-30
+N_iterations: 200  # online iterations per seed. 2-15
+episode_length: 50  
+embedding_name: "avg_sa"  
+N_offline_trajs: 20  
+# offline learning
+N_confset_size: 100
+confset_base: "bcnoise"  # What the candidate set is made of. "bcnoise" (BC, +noise), "bignoise" (BC+10x noise, w/o BC), "random" (random policies).
+confset_dilution: "bignoise"  # What gets added to the confset_base to augment the candidate set. "None", "random" (add random policies), "bignoise" (add BC+10x noise policies).
+N_confset_dilution: 400  # Number of policies to add to the confset_base.
+confset_noise: 0.01  # noise added to BC policy to generate confset. if not provided, filled in w/ environment defaults
+n_bc_epochs: 100
+radius: 0.65  # for filtering offline confset: L2(embed(π_BC) - embed(π_candidate)) < radius
+# online learning
+N_rollouts: 10  # how many trajectories to sample & annotate per online loop
+filter_pi_t_yesno: true  # if True, filters online confset according to {pi in Pi_0 s.t. for all other pi': Δϕᵀw + γ * sqrt(Δϕᵀ V_inv Δϕ) >= 0}. alias "filter_online"
+filter_pi_t_gamma: 10  # used only if filter_pi_t_yesno is True. alias "filter_gamma"
+w_epochs: 100  # 100 , 10 (tabular BRIDGE)
+w_initialization: "uniform"  # "zeros" , "uniform" (tabular BRIDGE), "random"
+which_policy_selection: "random"  # "ucb", "random" , "max_uncertainty"
+ucb_beta: 1  # used when selecting policy pairs with UCB: formula is ucb_score = σ(Δϕᵀ w) + ucb_beta * sqrt(Δϕᵀ V_inv Δϕ)
+n_embedding_samples: 200
+# verbosity
+verbose: []  # list, either [] or any combination of 'full', 'loop-summary', 'radius-calc', 'offline-confset', 'online-confset', 'warnings', 'losses'
+
+# don't touch below
+run_baseline: true
+run_bridge: true
+save_results: true
+run_ID: "paper_run_RERUN"  # options: null (creates unique 3-digit ID), or string. If string, checks if dir exists -- if yes, loads & does what's specified in 'loaded_run_purpose', if no, runs new experiment.
+loaded_run_behaviour: "overwrite"  # options: null (defaults to continue), "continue" (load metrics, sim what's missing, re-plot), "redo" (load params, re-sim, re-plot), "overwrite" (don't load anything, write to dir with current params)
+which_plot_subopt: ["cumulative_regret"]  # list: containing "suboptimality_percent" or "regret" or "cumulative_regret" or "raw_reward"
